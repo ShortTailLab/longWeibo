@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>jQuery File Upload Example</title>
+
+<link rel="stylesheet" type="text/css" href="/static/style.css" >
+
+<script src="/static/jquery-1.7.2.js"></script>
+<script src="/static/js/jquery-ui-1.8.21.custom.min.js"></script>
+<script src="/static/jquery.iframe-transport.js"></script>
+<script src="/static/jquery.fileupload.js"></script>
+<script src="/static/jquery.textarea-expander.js"></script>
+<script src="/static/main.js"></script>
+</head>
+
+<body>
+    <!-- content section -->
+    <div class="center480">
+        <div style="position: absolute; height: 0px;">
+            <ul class="tool-box" style="position: relative; width: 120px; left:484px; top: 100px;">
+                <li id="tool-add-text"   class="tool-button add-text"  style="">写文字</li>
+                <li id="tool-add-image"  class="tool-button add-image" style="border-bottom: 3px dashed #000000" >拖图片</li>
+
+                <li id="tool-trash" class="tool-button" style="min-height: 100px;">拖到这里删除</li>
+                <li id="tool-render" class="tool-button" style="min-height: 50px;">生成图片</li>
+            </ul>
+        </div>
+
+        <ul id="doc" style="width: 480px; min-height: 600px; list-style: none; padding: 0; margin: 0 auto;"></ul>
+    </div>
+
+    <!-- template section -->
+    <div id="template-lib" style="display: none;">
+        <div id="_text-item">
+            <li class="text-box">
+                <textarea>在这里输入文字。</textarea>
+            </li>
+        </div>
+
+        <div id="_image-item">
+            <li style="margin: 5px;">
+                <div class="image-box">
+                    <input id="fileupload" type="hidden" name="files[]" multiple>
+                    <img style="display:none" src="" alt="" />
+                    <p>把图片拖到这里添加</p>
+                </div>
+            </li>
+        </div>
+    </div>
+</body>
+
+</html>

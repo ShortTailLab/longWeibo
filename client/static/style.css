@@ -1,0 +1,78 @@
+body
+{
+    margin: 0px; 
+    padding: 0px;
+}
+
+.center480
+{
+    width: 480px; 
+    margin: 0 auto; 
+    border: 2px dashed #DADADA;
+}
+
+.box-highlight
+{
+    padding: 5px;
+    margin: 5px;
+    border: 3px solid #000000;
+    background-color: #000000;
+}
+
+.image-box
+{
+    padding: 5px;
+    border: 3px dashed #000000;
+    text-align: center;
+
+    margin: 0 auto;
+}
+
+.image-box img
+{
+    display: inline-block;
+}
+
+.text-box
+{
+    padding: 3px;
+    margin: 5px;
+    line-height: 14px;
+    border: 3px dashed #000000;
+}
+
+.text-box textarea
+{
+    border: 0px;
+    resize: none;
+    width: 100%;
+    font-size: 16px;
+}
+
+.tool-box
+{
+    margin: 5px;
+    border: 3px dashed #000000;
+    list-style: none; 
+    padding : 0; 
+    margin : 0;  
+    overflow: auto;
+}
+
+.tool-button
+{
+    font-family: Heiti SC;
+    font-size: 20px;
+    line-height: 40px;
+
+    border-bottom: 3px dashed #000000;   
+    cursor: pointer;
+
+    margin: 5px;
+    text-align: center;
+}
+
+.tool-button:last-child
+{
+    border-bottom: 0px;
+}
