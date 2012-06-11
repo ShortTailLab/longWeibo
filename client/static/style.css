@@ -11,6 +11,11 @@ body
     border: 2px dashed #DADADA;
 }
 
+.norender
+{
+    /* stub, used in render.css to mark elements not for rendering*/
+}
+
 .box-highlight
 {
     padding: 5px;
@@ -37,7 +42,6 @@ body
 {
     padding: 3px;
     margin: 5px;
-    line-height: 14px;
     border: 3px dashed #000000;
 }
 
@@ -46,7 +50,13 @@ body
     border: 0px;
     resize: none;
     width: 100%;
+    line-height: 16px;
     font-size: 16px;
+}
+
+.autohint
+{
+    color: #AAAAAA;
 }
 
 .tool-box
@@ -56,8 +66,9 @@ body
     list-style: none; 
     padding : 0; 
     margin : 0;  
-    overflow: auto;
+    overflow: hidden;
 }
+
 
 .tool-button
 {

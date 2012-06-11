@@ -16,6 +16,7 @@ function setupFileUpload($root)
             
             // play an animation here
             $p.hide();
+
             $image.attr('src', data.result.thunmnail_url)
                 .load( function()
                 {
@@ -26,6 +27,8 @@ function setupFileUpload($root)
             $image.show();
 
             $uploader.fileupload('destroy');
+
+            $root.removeClass('norender');
             
             console.log($image.width());
             console.log(e);
@@ -53,11 +56,14 @@ function setupFileUpload($root)
 
 function postToRender($stuff)
 {
+    $('#tool-render-result').hide();
+
     $.post('/render', { content : $stuff.html() }, function(data)
     {
         if(data.success)
         {
-            console.log(data);
+            $('#tool-render-result').html('a href="' + data.image_url + '">URL</a>');
+            $('#tool-render-result').slideDown();
         }
     });
 }
@@ -70,6 +76,10 @@ function createTextItem(defaultText)
     if(defaultText)
     {
         $item.find("textarea").val(defaultText);
+    }
+    else
+    {
+        $item.find("textarea").val( $item.find('textarea').attr('title'));
     }
 
     $item.find("textarea").TextAreaExpander(50);
@@ -99,6 +109,13 @@ $(function ()
     { 
         opacity: 0.7, 
         placeholder : "box-highlight",
+        helper : 'clone',
+        
+        /*function(event)
+        {
+            console.log(event);
+            return '<div></div>';
+        },*/
         
         stop: function(event, ui)
         {
@@ -122,30 +139,33 @@ $(function ()
     $('#tool-add-text').draggable(
     {
         connectToSortable : "#doc",
-        helper : function(event) { return "<div></div>"; }, 
+        helper : function(event) { return "<div style='display: none;'></div>"; },
+        appendTo: 'body',
+        scroll: false,
         revert : 'invalid',
-    });
-
-    $("#tool-add-text").click(function()
+    })
+    .click(function()
     {
         $item = createTextItem();
         $("#doc").append($item);
     });
 
     // add image button
-    $("#tool-add-image").click(function()
+     $('#tool-add-image').draggable(
+    {
+        connectToSortable: '#doc',
+        helper : function(event) { return "<div style='display: none;'></div>"; },
+        revert : 'invalid',
+        appendTo : 'body',
+        scroll : false,
+        revert : 'invalid',
+    })
+    .click(function()
     {
         $item = createImageItem();
         $("#doc").append($item);
     });
 
-    $('#tool-add-image').draggable(
-    {
-        connectToSortable: '#doc',
-        helper : function(event) { return "<div></div>"; },
-        revert : 'invalid',
-    });
-    
     // trash area
     $('#tool-trash').droppable(
     {
@@ -161,6 +181,24 @@ $(function ()
     $('#tool-render').click(function()
     {
         postToRender($('#doc'));
+    });
+
+
+    $('html').on('focus', 'textarea.autohint', function()
+    {
+        if( $(this).val() == $(this).attr('title') )
+        {
+            $(this).val( '' );
+            $(this).removeClass('autohint');
+        }
+    });
+    $('html').on('blur', 'textarea.autohint', function()
+    {
+        if( $(this).val() == '')
+        {
+            $(this).val( $(this).attr('title') );
+            $(this).addClass('autohint');
+        }
     });
 
     // example items to insert

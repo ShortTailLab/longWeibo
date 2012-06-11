@@ -17,13 +17,18 @@
 <body>
     <!-- content section -->
     <div class="center480">
-        <div style="position: absolute; height: 0px;">
-            <ul class="tool-box" style="position: relative; width: 120px; left:484px; top: 100px;">
+        <div style="position: fixed; height: 0px;">
+            <ul id='tool-add-list' class="tool-box" style="position: relative; width: 120px; left:484px; top: 100px;">
                 <li id="tool-add-text"   class="tool-button add-text"  style="">写文字</li>
-                <li id="tool-add-image"  class="tool-button add-image" style="border-bottom: 3px dashed #000000" >拖图片</li>
+                <li id="tool-add-image"  class="tool-button add-image" style="" >拖图片</li>
+            </ul>
 
-                <li id="tool-trash" class="tool-button" style="min-height: 100px;">拖到这里删除</li>
+            <ul class="tool-box" style="position: relative; width: 120px; left:484px; top: 200px;">
+                <li id="tool-trash" class="tool-button" style="min-height: 100px;">段落拖到这里删除</li>
+            </ul>
+            <ul class="tool-box" style="position: relative; width: 120px; left:484px; top: 300px;">
                 <li id="tool-render" class="tool-button" style="min-height: 50px;">生成图片</li>
+                <li id="tool-render-result" class="tool-button" style="min-height: 50px;">URL</li>
             </ul>
         </div>
 
@@ -33,17 +38,17 @@
     <!-- template section -->
     <div id="template-lib" style="display: none;">
         <div id="_text-item">
-            <li class="text-box">
-                <textarea>在这里输入文字。</textarea>
+            <li class="text-box norender">
+                <textarea class='autohint' title="这里输入文字."></textarea>
             </li>
         </div>
 
         <div id="_image-item">
             <li style="margin: 5px;">
-                <div class="image-box">
+                <div class="image-box norender">
                     <input id="fileupload" type="hidden" name="files[]" multiple>
                     <img style="display:none" src="" alt="" />
-                    <p>把图片拖到这里添加</p>
+                    <p>图片拖到这里添加.</p>
                 </div>
             </li>
         </div>
