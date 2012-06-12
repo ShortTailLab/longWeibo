@@ -5,9 +5,16 @@ import tornado.httpserver, tornado.ioloop, tornado.options, tornado.web, os.path
 from tornado.options import define, options, parse_command_line
 
 define("port", default=8000, help="run on the given port", type=int)
+define("arch", default="x86_64", help="platform architecture, valid value: i686 or x86_64", type=str)
+
+cutybin = ""
 
 def file_path(relative) :
-    return os.path.join(os.path.dirname(__file__), relative)
+    abspath = os.path.abspath(__file__)
+    return os.path.join(os.path.dirname(abspath), relative)
+
+def domain_path(relative) :
+    return os.path.join('http://localhost:8000', relative)
 
 # Page
 class Home(tornado.web.RequestHandler):
@@ -45,8 +52,20 @@ fid=0
 # Json
 class Render(tornado.web.RequestHandler):
     def post(self,*args,**kwargs):
-        content = self.get_argument('content')
-        html = tornado.template.Loader(file_path("")).load("_render.html").generate( content = content )
+        #content = self.get_argument('content')
+        itemList = json.loads(self.get_argument('itemList'))
+        print str(itemList)
+
+        loader = tornado.template.Loader(file_path(""))
+        
+        itemHTML = ""
+        for item in itemList:
+            if item['type'] == 'text':
+                itemHTML += loader.load('_text_item.html').generate(text = item['text'], height = item['height'])
+            elif item['type'] == 'image':
+                itemHTML += loader.load('_image_item.html').generate(image_url = item['image_url'], width = item['width'])
+
+        html = loader.load("_render.html").generate( content = itemHTML )
         print html
 
         #format file name
@@ -58,22 +77,23 @@ class Render(tornado.web.RequestHandler):
         now=datetime.datetime.now()
         #filename = now.strftime("%Y%m%dT%H%M%S") + "F" + str(fid)
         filename = "out"
-        src_file = file_path('static/render/' + filename + '.html')
+        domain_src_file = domain_path('static/render/' + filename + '.html')
+        local_src_file = file_path('static/render/' + filename + '.html')
         output_file = file_path('static/render/' + filename + '.jpg')
 
-        print "====================="
-        f = open(src_file,'w')
+        print "=========RENDER FILE======="
+        f = open(local_src_file,'w')
         f.write(html)
         f.close()
 
-        print src_file + ' written'
+        print local_src_file + ' written'
 
-        print "====================="
-        print "running HTML->IMG"
-        print "filename: " + filename
-        subprocess.call(["./../bin/wkhtmltoimage-i386", src_file, output_file])
-        print "====================="
-        print "returning..."
+        print "=======HTML -> IMG========="
+        print "output file: " + output_file
+        cmd = "./../bin/{0} --min-width=0 --url={1} --out={2}".format(cutybin, domain_src_file, output_file)
+        print "cmd: " + cmd
+        subprocess.Popen(cmd, shell=True)
+        print "==========END=============="
         
         resp = {    'success' : True,
                     'error' : None,
@@ -96,5 +116,7 @@ application = tornado.web.Application([
 
 if __name__ == "__main__":
     parse_command_line()
+    cutybin = "CutyCapt-x64" if options.arch == "x86_64" else "CutyCapt-i686"
+
     application.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()

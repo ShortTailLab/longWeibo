@@ -11,6 +11,7 @@
 <script src="/static/jquery.iframe-transport.js"></script>
 <script src="/static/jquery.fileupload.js"></script>
 <script src="/static/jquery.textarea-expander.js"></script>
+<script src="/static/json2.js"></script>
 <script src="/static/main.js"></script>
 </head>
 
@@ -38,14 +39,14 @@
     <!-- template section -->
     <div id="template-lib" style="display: none;">
         <div id="_text-item">
-            <li class="text-box norender">
+            <li class="text-box">
                 <textarea class='autohint' title="这里输入文字."></textarea>
             </li>
         </div>
 
         <div id="_image-item">
             <li style="margin: 5px;">
-                <div class="image-box norender">
+                <div class="image-box">
                     <input id="fileupload" type="hidden" name="files[]" multiple>
                     <img style="display:none" src="" alt="" />
                     <p>图片拖到这里添加.</p>

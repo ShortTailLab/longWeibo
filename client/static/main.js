@@ -13,7 +13,6 @@ function setupFileUpload($root)
         done: function (e, data) 
         {
             console.log("upload finished");
-            
             // play an animation here
             $p.hide();
 
@@ -28,8 +27,6 @@ function setupFileUpload($root)
 
             $uploader.fileupload('destroy');
 
-            $root.removeClass('norender');
-            
             console.log($image.width());
             console.log(e);
             console.log(data);
@@ -54,11 +51,47 @@ function setupFileUpload($root)
     });
 }
 
+function textItemJson(text, height)
+{
+    return { type : 'text', text : text, height : height };
+}
+
+function imageItemJson(url, width)
+{
+    return { type : 'image', image_url : url, width : width };
+}
+
 function postToRender($stuff)
 {
     $('#tool-render-result').hide();
 
-    $.post('/render', { content : $stuff.html() }, function(data)
+    var itemList = [];
+    $stuff.children().each( function()
+    {
+        if( $(this).hasClass('text-box') )
+        {
+            var text = $(this).find('textarea').val();
+            var hint = $(this).find('textarea').attr('title');
+            var height = $(this).find('textarea').height();
+
+            if(text != '' && text != hint)
+            {
+                itemList.push( textItemJson(text, height) );
+            }
+        }
+        else if( $(this).find('.image-box') )
+        {
+            var image_url = $(this).find('img').attr('src');
+            var width = $(this).find('img').width();
+            if( image_url != '' )
+            {
+                itemList.push( imageItemJson(image_url, width) );
+            }
+        }
+    });
+    console.log( itemList );
+
+    $.post('/render', { itemList : JSON.stringify(itemList) }, function(data)
     {
         if(data.success)
         {
@@ -203,7 +236,7 @@ $(function ()
 
     // example items to insert
     $item1 = createTextItem();
-    $item2 = createImageItem("https://www.google.com/images/srpr/logo3w.png");
+    $item2 = createImageItem();
 
     $list = $("#doc");
     $list.append($item1);
