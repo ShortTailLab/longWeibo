@@ -62,7 +62,7 @@ function postToRender($stuff)
     {
         if(data.success)
         {
-            $('#tool-render-result').html('a href="' + data.image_url + '">URL</a>');
+            $('#tool-render-result').html('<a target="_blank" href="' + data.image_url + '">URL</a>');
             $('#tool-render-result').slideDown();
         }
     });

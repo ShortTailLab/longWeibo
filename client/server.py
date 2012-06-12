@@ -56,23 +56,22 @@ class Render(tornado.web.RequestHandler):
         else:
             fid=fid+1
         now=datetime.datetime.now()
-        filename = now.strftime("%Y%m%dT%H%M%S") + "F" + str(fid)
+        #filename = now.strftime("%Y%m%dT%H%M%S") + "F" + str(fid)
+        filename = "out"
         src_file = file_path('static/render/' + filename + '.html')
         output_file = file_path('static/render/' + filename + '.jpg')
 
         print "====================="
-        print "assgning filename and saveing file"
-
         f = open(src_file,'w')
         f.write(html)
         f.close()
 
-        print src_file + 'written'
+        print src_file + ' written'
 
         print "====================="
         print "running HTML->IMG"
         print "filename: " + filename
-        subprocess.call(["./../bin/wkhtmltoimage-amd64", src_file, output_file])
+        subprocess.call(["./../bin/wkhtmltoimage-i386", src_file, output_file])
         print "====================="
         print "returning..."
         
