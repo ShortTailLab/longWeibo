@@ -5,9 +5,11 @@ import tornado.httpserver, tornado.ioloop, tornado.options, tornado.web, os.path
 from tornado.options import define, options, parse_command_line
 
 define("port", default=8000, help="run on the given port", type=int)
-define("arch", default="x86_64", help="platform architecture, valid value: i686 or x86_64", type=str)
+define("i386", default=False, help="use this option if running on 32bit system", type=bool)
+define("xvfb", default=False, help="use this option if running on headless server", type=bool)
 
 cutybin = ""
+xvfb = ""
 
 def file_path(relative) :
     abspath = os.path.abspath(__file__)
@@ -89,7 +91,7 @@ class Render(tornado.web.RequestHandler):
 
         print "=======HTML -> IMG========="
         print "output file: " + output_file
-        cmd = "./../bin/{0} --min-width=0 --url={1} --out={2}".format(cutybin, domain_src_file, output_file)
+        cmd = "{3} ./../bin/{0} --min-width=0 --url={1} --out={2}".format(cutybin, domain_src_file, output_file, xvfb)
         print "cmd: " + cmd
         subprocess.Popen(cmd, shell=True)
         print "==========END=============="
@@ -115,7 +117,8 @@ application = tornado.web.Application([
 
 if __name__ == "__main__":
     parse_command_line()
-    cutybin = "CutyCapt-x64" if options.arch == "x86_64" else "CutyCapt-i686"
+    cutybin = "CutyCapt-i686" if options.i386 else "CutyCapt-x64"
+    xvfb = "xvfb-run --server-args=\"-screen 0, 1024x768x24\"" if options.xvfb else ""
 
     application.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
