@@ -52,7 +52,6 @@ fid=0
 # Json
 class Render(tornado.web.RequestHandler):
     def post(self,*args,**kwargs):
-        #content = self.get_argument('content')
         itemList = json.loads(self.get_argument('itemList'))
         print str(itemList)
 
@@ -75,8 +74,8 @@ class Render(tornado.web.RequestHandler):
         else:
             fid=fid+1
         now=datetime.datetime.now()
-        #filename = now.strftime("%Y%m%dT%H%M%S") + "F" + str(fid)
-        filename = "out"
+        filename = now.strftime("%Y%m%dT%H%M%S") + "F" + str(fid)
+        #filename = "out"
         domain_src_file = domain_path('static/render/' + filename + '.html')
         local_src_file = file_path('static/render/' + filename + '.html')
         output_file = file_path('static/render/' + filename + '.jpg')

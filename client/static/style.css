@@ -3,6 +3,7 @@ body
     margin: 0px; 
     padding: 0px;
     background-color: #DDDDDD;
+    font-family: STHeiti, tohoma, arial
 }
 
 .center480
@@ -11,11 +12,6 @@ body
     margin: 0 auto; 
     border: 2px dashed #DADADA;
     background-color: #FFFFFF;
-}
-
-.norender
-{
-    /* stub, used in render.css to mark elements not for rendering*/
 }
 
 .box-highlight
@@ -70,7 +66,6 @@ body
     margin : 0;  
     overflow: hidden;
 }
-
 
 .tool-button
 {

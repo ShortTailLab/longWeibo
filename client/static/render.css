@@ -2,7 +2,8 @@ body
 {
     margin: 0px; 
     padding: 0px;
-    background-color: #DDDDDD;
+    /*background-color: #DDDDDD;*/
+    background-color: #FFFFFF;
 }
 
 .center480
@@ -43,3 +44,10 @@ body
     font-size: 16px;
 }
 
+.cutter
+{
+    margin: 0 auto;
+    width: 468px;
+    height: 1px;
+    background-color: #555555;
+}
