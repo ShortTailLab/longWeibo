@@ -7,6 +7,14 @@ body
     font-family: STHeiti, Heiti SC, tohoma, arial
 }
 
+.header-text
+{
+    margin: 5px; 
+    padding: 3px; 
+    font-size: 0.9em; 
+    color: #888888;
+}
+
 .center480
 {
     width: 480px; 

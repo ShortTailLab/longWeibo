@@ -1,12 +1,15 @@
 import datetime, time
 import json
 import subprocess
+import random
 import tornado.httpserver, tornado.ioloop, tornado.options, tornado.web, os.path 
 from tornado.options import define, options, parse_command_line
 
 define("port", default=8000, help="run on the given port", type=int)
 define("i386", default=False, help="use this option if running on 32bit system", type=bool)
 define("xvfb", default=False, help="use this option if running on headless server", type=bool)
+
+RAND_FILE_NAME_LENGTH = 12
 
 cutybin = ""
 xvfb = ""
@@ -18,6 +21,17 @@ def file_path(relative) :
 def domain_path(relative) :
     return os.path.join('http://localhost:8000', relative)
 
+def rand_string(length = RAND_FILE_NAME_LENGTH):
+    s = ""
+    for i in range(0, length):
+        cap = random.randint(0,1) == 1
+        r = random.randint(0, 25)
+        if cap:
+            s += chr(97 + r)
+        else:
+            s += chr(65 + r)
+    return s
+
 # Page
 class Home(tornado.web.RequestHandler):
     def get(self):
@@ -28,19 +42,27 @@ class UploadImage(tornado.web.RequestHandler):
     def post(self):
         f = self.request.files[u'files[]'][0]
 
+        iname, iext = os.path.splitext(f['filename'])
+        if iext == "" or iext.lower() not in ['.png', '.jpg', '.jpeg', '.tiff', '.tif', '.gif']:
+            self.finish("Wrong file type")
+            return
+
+        #name = f['filename']
+        filename = rand_string() + iext
+        print filename
+
         # now you can do what you want with the data, we will just save the file to an uploads folder
         upload_path = file_path("static/uploads/")
-        output_file = open(upload_path + f['filename'], 'w')
+        output_file = open(upload_path + filename, 'w')
         output_file.write(f['body'])
 
-        name = f['filename']
         size = len(f['body'])
 
         resp = { 
-            'name' : name,
+            'name' : filename,
             'size' : size,
-            'url'  : '/static/uploads/' + name,
-            'thunmnail_url' : '/static/uploads/' + name,
+            'url'  : '/static/uploads/' + filename,
+            'thunmnail_url' : '/static/uploads/' + filename,
             'delete_url' : '',
             'delete_type' : 'DELETE',
         }

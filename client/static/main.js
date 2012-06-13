@@ -21,7 +21,10 @@ function setupFileUpload($root)
                 {
                     console.log($image);
                     console.log($image.width());
-                    $root.find('.image-box').css('width', $image.width());
+                    var $imagebox = $root.find('.image-box');
+                    var w = $image.width() > $imagebox.width() ?$imagebox.width() : $image.width();
+                    //$imagebox.css('width', w);
+                    $image.css('width', w);
                 });
             $image.show();
 
