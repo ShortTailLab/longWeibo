@@ -1,7 +1,7 @@
 function setupFileUpload($root)
 {
     var $uploader = $root.find('#fileupload');
-    var $image = $root.find('img');
+    var $image = $root.find('.usrIMG');
     var $p = $root.find('p');
 
     $root.find('#fileupload').fileupload(
@@ -127,7 +127,7 @@ function createImageItem(image_url)
     // clone
     //var $item = $.extend(true, {}, $("#template-lib #_image-item li"));
     var $item = $("#template-lib #_image-item li").clone();
-    $item.find("img").attr("src", image_url);
+    $item.find(".usrIMG #usrIMG").attr("src", image_url);
 
     setupFileUpload($item);
 
