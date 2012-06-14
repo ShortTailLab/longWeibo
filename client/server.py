@@ -2,10 +2,12 @@ import datetime, time
 import json
 import subprocess
 import random
+import cStringIO
+from PIL import Image
 import tornado.httpserver, tornado.ioloop, tornado.options, tornado.web, os.path 
 from tornado.options import define, options, parse_command_line
 
-define("port", default=8000, help="run on the given port", type=int)
+define("port", default=8001, help="run on the given port", type=int)
 define("i386", default=False, help="use this option if running on 32bit system", type=bool)
 define("xvfb", default=False, help="use this option if running on headless server", type=bool)
 
@@ -32,6 +34,14 @@ def rand_string(length = RAND_FILE_NAME_LENGTH):
             s += chr(65 + r)
     return s
 
+def save_thumbnail(s, out_path):
+    image = cStringIO.StringIO(s)
+    im = Image.open(image)
+    # use real height, but contrain width to max displayable
+    size = 480, im.size[1]
+    im.thumbnail(size, Image.ANTIALIAS)
+    im.save(out_path, 'JPEG')
+
 # Page
 class Home(tornado.web.RequestHandler):
     def get(self):
@@ -51,10 +61,12 @@ class UploadImage(tornado.web.RequestHandler):
         filename = rand_string() + iext
         print filename
 
-        # now you can do what you want with the data, we will just save the file to an uploads folder
-        upload_path = file_path("static/uploads/")
-        output_file = open(upload_path + filename, 'w')
-        output_file.write(f['body'])
+        #
+        upload_path = file_path("static/uploads/") + filename
+        save_thumbnail(f['body'], upload_path)
+
+        #output_file = open(upload_path + filename, 'w')
+        #output_file.write(f['body'])
 
         size = len(f['body'])
 
@@ -92,13 +104,15 @@ class Render(tornado.web.RequestHandler):
         print html
 
         #format file name
-        global fid
-        if (fid>99999):
-            fid=0
-        else:
-            fid=fid+1
-        now=datetime.datetime.now()
-        filename = now.strftime("%Y%m%dT%H%M%S") + "F" + str(fid)
+        #global fid
+        #if (fid>99999):
+        #    fid=0
+        #else:
+        #    fid=fid+1
+        #now=datetime.datetime.now()
+        #filename = now.strftime("%Y%m%dT%H%M%S") + "F" + str(fid)
+        filename = rand_string()
+
         #filename = "out"
         domain_src_file = domain_path('static/render/' + filename + '.html')
         local_src_file = file_path('static/render/' + filename + '.html')
@@ -140,7 +154,7 @@ application = tornado.web.Application([
 if __name__ == "__main__":
     parse_command_line()
     cutybin = "CutyCapt-i686" if options.i386 else "CutyCapt-x64"
-    xvfb = "xvfb-run --server-args=\"-screen 0, 1024x768x24\"" if options.xvfb else ""
+    xvfb = "xvfb-run --server-args=\"-screen 1, 1024x768x24\"" if options.xvfb else ""
 
     application.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
