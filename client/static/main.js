@@ -10,29 +10,29 @@ function setupFileUpload($root)
         sequentialUploads: true,
         dataType : 'json',
         dropZone: $root,
+
         done: function (e, data) 
         {
-            console.log("upload finished");
-            // play an animation here
-            $p.hide();
+            if(data.result.success)
+            {
+                $p.hide(); // hide progress text
 
-            $image.attr('src', data.result.thunmnail_url)
-                .load( function()
-                {
-                    console.log($image);
-                    console.log($image.width());
-                    var $imagebox = $root.find('.image-box');
-                    var w = $image.width() > $imagebox.width() ?$imagebox.width() : $image.width();
-                    //$imagebox.css('width', w);
-                    $image.css('width', w);
-                });
-            $image.show();
+                $image.attr('src', data.result.thunmnail_url)
+                    .load( function()
+                    {
+                        var $imagebox = $root.find('.image-box');
+                        var w = $image.width() > $imagebox.width() ?$imagebox.width() : $image.width();
+                        //$imagebox.css('width', w);
+                        $image.css('width', w);
+                    });
+                $image.fadeIn();
 
-            $uploader.fileupload('destroy');
-
-            console.log($image.width());
-            console.log(e);
-            console.log(data);
+                $uploader.fileupload('destroy');
+            }
+            else
+            {
+                alert("文件太大了，最大为2 MB");
+            }
         },
 
         progress: function(e, data)
@@ -64,9 +64,13 @@ function imageItemJson(url, width)
     return { type : 'image', image_url : url, width : width };
 }
 
+/*****
+  generate a list of json objects for rendering
+ *****/
 function postToRender($stuff)
 {
-    $('#tool-render-result').hide();
+    //$('#tool-render-result').hide();
+    $('#tool-render-result').html("正在生成图片");
 
     var itemList = [];
     $stuff.children().each( function()
@@ -98,7 +102,7 @@ function postToRender($stuff)
     {
         if(data.success)
         {
-            $('#tool-render-result').html('<a target="_blank" href="' + data.image_url + '">URL</a>');
+            $('#tool-render-result').html('<a target="_blank" href="' + data.image_url + '">做好了.</a>');
             $('#tool-render-result').slideDown();
         }
     });
@@ -143,15 +147,10 @@ $(function ()
 
     $('#doc').sortable(
     { 
-        opacity: 0.7, 
+        opacity: 0.7,  
         placeholder : "box-highlight",
-        helper : 'clone',
-        
-        /*function(event)
-        {
-            console.log(event);
-            return '<div></div>';
-        },*/
+        helper : 'clone', 
+        axis : 'y',
         
         stop: function(event, ui)
         {
