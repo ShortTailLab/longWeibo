@@ -47,10 +47,10 @@
 
         <div id="_image-item">
             <li style="margin: 5px;">
-                <div class="image-box">
+                <div class="image-box" style="position:relative">
                     <input id="fileupload" type="hidden" name="files[]" multiple>
-                    <img class="removeIMG" src="../static/remove.png"/>
-                    <img class="usrIMG" style="display:none" src="" alt="" />
+                    <img class="usrIMG" style="display:none" src="" alt="" onmouseover="opaque($(this).next())" onmouseout="transparent($(this).next())"/>
+                    <img class="removeIMG" style="opacity:0" src="../static/remove.png" onmouseover="opaque(this)" onmouseout="transparent(this)" onclick="removeTag($(this).parent().parent(),$(this).prev().attr('src'))"/>
                     <p>图片拖到这里添加.</p>
                     <!--
                     -->

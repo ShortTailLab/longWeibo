@@ -17,8 +17,11 @@ cutybin = ""
 xvfb = ""
 
 def file_path(relative) :
-    abspath = os.path.abspath(__file__)
-    return os.path.join(os.path.dirname(abspath), relative)
+    pyabspath = os.path.abspath(__file__)
+    abspath=os.path.dirname(pyabspath)
+    relative='./'+relative
+    path=os.path.join(abspath,relative)
+    return path
 
 def domain_path(relative) :
     return os.path.join('http://localhost:8000', relative)
@@ -139,6 +142,23 @@ class Render(tornado.web.RequestHandler):
        
         self.finish( resp )
 
+class deleteImage(tornado.web.RequestHandler):
+    def get(self,*args,**kwargs):
+        imagePath=self.get_argument("imagePath");
+        imageAbsPath=file_path(imagePath)
+        print "removing: "+imageAbsPath
+        os.remove(imageAbsPath)
+        self.finish(
+        {
+            'success':True,
+            'error':None},
+        )
+
+
+
+
+
+
 settings ={
     "static_path" : os.path.join(os.path.dirname(__file__), "static"),
     "debug" : True,
@@ -149,6 +169,7 @@ application = tornado.web.Application([
     (r"/", Home),
     (r"/upload", UploadImage),
     (r"/render", Render),
+    (r"/deleteImage",deleteImage),
 ], **settings);
 
 if __name__ == "__main__":

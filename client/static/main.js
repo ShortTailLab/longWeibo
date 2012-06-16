@@ -248,3 +248,35 @@ $(function ()
 
 });
 
+function transparent(elem)
+{
+    $(elem).css('opacity','0');
+}
+
+function opaque(elem)
+{
+    $(elem).css('opacity','0.5');
+}
+function removeTag(tag,src)
+{
+    console.log("preparing to remove")
+    console.log(tag)
+    console.log(src)
+    $(tag).remove()
+    $.get("/deleteImage?imagePath="+src)
+}
+
+/*
+function userImgMouse(elem,evtype)
+{
+    if (evtype="over"){
+        $(elem).next().css('opacity', '0.8');
+    }
+    else{
+        $(elem).next().css('opacity','0');
+    }
+
+
+}
+
+*/
