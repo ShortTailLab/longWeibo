@@ -7,6 +7,7 @@ import shlex
 from multiprocessing import Pool, Queue
 from PIL import Image
 import tornado.httpserver, tornado.ioloop, tornado.options, tornado.web, tornado.gen
+import redis
 import os.path 
 from tornado.options import define, options, parse_command_line
 
@@ -14,7 +15,10 @@ define("port", default=8000, help="run on the given port", type=int)
 define("i386", default=False, help="use this option if running on 32bit system", type=bool)
 define("xvfb", default=False, help="use this option if running on headless server", type=bool)
 define("maxupload", default=2048, help="max uploaded image size, kb", type=bool)
+
 RAND_FILE_NAME_LENGTH = 12
+
+rdb = redis.ConnectionPool(host='localhost', port=6379, db=0)
 
 def file_path(relative) :
     abspath = os.path.abspath(__file__)
@@ -65,7 +69,6 @@ class UploadImage(tornado.web.RequestHandler):
         filename = rand_string() + iext
         print filename
 
-        #
         upload_path = file_path("static/uploads/") + filename
         save_thumbnail(f['body'], upload_path)
 
