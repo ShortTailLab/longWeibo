@@ -1,15 +1,12 @@
-import datetime, time
-import json
-import subprocess
-import random
-import cStringIO
-import shlex
+import datetime, time, json, subprocess
+import random, cStringIO, shlex
 from multiprocessing import Pool, Queue
 from PIL import Image
 import tornado.httpserver, tornado.ioloop, tornado.options, tornado.web, tornado.gen
-import redis
-import os.path 
 from tornado.options import define, options, parse_command_line
+import os.path 
+import redis
+from session import Session, RedisSessionStore
 
 define("port", default=8000, help="run on the given port", type=int)
 define("i386", default=False, help="use this option if running on 32bit system", type=bool)
@@ -18,8 +15,12 @@ define("maxupload", default=2048, help="max uploaded image size, kb", type=bool)
 
 RAND_FILE_NAME_LENGTH = 12
 
-rdb = redis.ConnectionPool(host='localhost', port=6379, db=0)
+# global stuff
+redis_pool = redis.ConnectionPool(host='localhost', port=6379, db=0)
+R = redis.Redis(connection_pool = redis_pool)
+sessionStore = RedisSessionStore(R)
 
+# helper methods
 def file_path(relative) :
     abspath = os.path.abspath(__file__)
     return os.path.join(os.path.dirname(abspath), relative)
@@ -46,41 +47,69 @@ def save_thumbnail(s, out_path):
     im.thumbnail(size, Image.ANTIALIAS)
     im.save(out_path, 'JPEG')
 
+
+# Handlers
+class BaseHandler(tornado.web.RequestHandler):
+    def session(self):
+        sessionid = self.get_secure_cookie('session')
+        return Session(sessionStore, sessionid) if sessionid else None
+
 # Page
-class Home(tornado.web.RequestHandler):
+class Home(BaseHandler):
     def get(self):
+        session = self.session()
+        if session:
+            session.access(self.request.remote_ip)
+        else:
+            session = Session(sessionStore)
+            self.set_secure_cookie('session', value = session.sessionid)
+
         self.render(file_path("index.html"))
 
 # Json
-class UploadImage(tornado.web.RequestHandler):
+class UploadImage(BaseHandler):
     def post(self):
         f = self.request.files[u'files[]'][0]
 
-        if len(f['body']) > (options.maxupload * 1024):
+        # limit upload file size
+        filesize = len(f['body'])
+        if filesize > (options.maxupload * 1024):
             self.send_error()
             return 
-
+        
+        # check file extension
         iname, iext = os.path.splitext(f['filename'])
         if iext == "" or iext.lower() not in ['.png', '.jpg', '.jpeg', '.tiff', '.tif', '.gif']:
             self.send_error({ 'name' : filename, 'size' : size, 'success' : False })
             return
 
-        #name = f['filename']
+        # obtain a random file name
         filename = rand_string() + iext
-        print filename
 
+        # save file to user session
+        sid = self.get_secure_cookie('session')
+        session = None
+        if sid:
+            session = Session(sessionStore, sessionid = sid)
+        else: 
+            session = Session(sessionStore)
+
+        # store updated upload list to redis
+        session.access(self.request.remote_ip)
+        uploaded = session.uploaded()
+        uploaded.append(filename)
+        session.setUploaded(uploaded)
+
+        print session.fetch('uploaded')
+
+        # resize to a thumbnail then save to disk
         upload_path = file_path("static/uploads/") + filename
         save_thumbnail(f['body'], upload_path)
-
-        #output_file = open(upload_path + filename, 'w')
-        #output_file.write(f['body'])
-
-        size = len(f['body'])
 
         resp = { 
             'success' : True,
             'name' : filename,
-            'size' : size,
+            'size' : filesize,
             'url'  : '/static/uploads/' + filename,
             'thunmnail_url' : '/static/uploads/' + filename,
             'delete_url' : '',
@@ -91,7 +120,7 @@ class UploadImage(tornado.web.RequestHandler):
 
 
 # Json
-class Render(tornado.web.RequestHandler):
+class Render(BaseHandler):
     
     @tornado.web.asynchronous
     @tornado.gen.engine
@@ -147,6 +176,7 @@ settings = {
     "debug" : True,
     "pool" : Pool(4),
     "queue" : Queue(),
+    "cookie_secret" : 'thisisacookiesecrethahaha'
 }
 
 

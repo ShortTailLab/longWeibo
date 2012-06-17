@@ -1,0 +1,18 @@
+
+
+each client ip
+
+ip = 
+{
+    uploaded: image names
+    #doc: 
+    #render: 
+    
+    #last active time: 
+    #expires time:
+}
+
+if has ip info
+    use existing
+else
+    create new key
