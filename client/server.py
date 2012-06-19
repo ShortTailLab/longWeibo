@@ -12,7 +12,8 @@ define("port", default=8000, help="run on the given port", type=int)
 define("i386", default=False, help="use this option if running on 32bit system", type=bool)
 define("xvfb", default=False, help="use this option if running on headless server", type=bool)
 define("maxupload", default=2048, help="max uploaded image size, kb", type=bool)
-
+define("debug", default=True, help="running server in debug mode", type=bool)
+define("pc", default=4, help="number of subprocesses", type=int)
 RAND_FILE_NAME_LENGTH = 12
 
 # global stuff
@@ -182,28 +183,26 @@ class DeleteImage(tornado.web.RequestHandler):
         os.remove(imageAbsPath)
         self.finish( { 'success':True,  'error':None} )
 
-settings = {
-    "static_path" : os.path.join(os.path.dirname(__file__), "static"),
-    "debug" : True,
-    "pool" : Pool(4),
-    "queue" : Queue(),
-    "cookie_secret" : 'thisisacookiesecrethahaha'
-}
-
-
-application = tornado.web.Application([
-    (r"/", Home),
-    (r"/upload", UploadImage),
-    (r"/render", Render),
-    (r"/deleteImage",DeleteImage),
-], **settings);
-
 if __name__ == "__main__":
     parse_command_line()
-    cutybin = "CutyCapt-i686" if options.i386 else "CutyCapt-x64"
-    xvfb = "xvfb-run --server-args=\"-screen 1, 1024x768x24\"" if options.xvfb else ""
-    print "============================"
-    print "server.py runing on port"+str(options.port)
-    print "============================"
+
+    settings = {
+        "static_path" : os.path.join(os.path.dirname(__file__), "static"),
+        "debug" : True,
+        "pool" : Pool(options.pc),
+        "queue" : Queue(),
+        "cookie_secret" : 'thisisacookiesecrethahaha'
+    }
+
+    application = tornado.web.Application([
+        (r"/", Home),
+        (r"/upload", UploadImage),
+        (r"/render", Render),
+        (r"/deleteImage",DeleteImage),
+    ], **settings);
+
+    print "-----------------------------------------------"
+    print "server started. port: {0}, debug: {1}, xvfb: {2}, process count: {3}".format(options.port, options.debug, options.xvfb, options.pc)
+    print "-----------------------------------------------"
     application.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
