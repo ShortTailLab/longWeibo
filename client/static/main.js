@@ -1,7 +1,7 @@
 function setupFileUpload($root)
 {
     var $uploader = $root.find('#fileupload');
-    var $image = $root.find('.usrIMG');
+    var $image = $root.find('.user-image');
     var $p = $root.find('p');
 
     $root.find('#fileupload').fileupload(
@@ -75,7 +75,7 @@ function postToRender($stuff)
     var itemList = [];
     $stuff.children().each( function()
     {
-        if( $(this).hasClass('text-box') )
+        if( $(this).find('.text-box').length > 0 )
         {
             var text = $(this).find('textarea').val();
             var hint = $(this).find('textarea').attr('title');
@@ -86,10 +86,10 @@ function postToRender($stuff)
                 itemList.push( textItemJson(text, height) );
             }
         }
-        else if( $(this).find('.image-box') )
+        else if( $(this).find('.image-box').length > 0 )
         {
-            var image_url = $(this).find('img').attr('src');
-            var width = $(this).find('img').width();
+            var image_url = $(this).find('.user-image').attr('src');
+            var width = $(this).find('.user-image').width();
             if( image_url != '' )
             {
                 itemList.push( imageItemJson(image_url, width) );
@@ -136,6 +136,29 @@ function createImageItem(image_url)
     setupFileUpload($item);
 
     return $item;
+}
+
+
+function transparent(elem)
+{
+    $(elem).css('opacity','0');
+}
+
+function opaque(elem)
+{
+    $(elem).css('opacity','0.5');
+}
+
+function removeTag(tag,src)
+{
+    console.log("preparing to remove")
+    console.log(tag)
+    console.log(src)
+    $(tag).remove()
+    if(src)
+    {
+        $.get("/deleteImage?imagePath="+src)
+    }
 }
 
 $(function () 
@@ -202,6 +225,7 @@ $(function ()
     });
 
     // trash area
+    /*
     $('#tool-trash').droppable(
     {
         hoverClass : "box-highlight",
@@ -212,13 +236,14 @@ $(function ()
         },
         tolerance: 'pointer',
     });
+     */
 
     $('#tool-render').click(function()
     {
         postToRender($('#doc'));
     });
 
-
+    // text area auto hint
     $('html').on('focus', 'textarea.autohint', function()
     {
         if( $(this).val() == $(this).attr('title') )
@@ -227,6 +252,7 @@ $(function ()
             $(this).removeClass('autohint');
         }
     });
+
     $('html').on('blur', 'textarea.autohint', function()
     {
         if( $(this).val() == '')
@@ -236,6 +262,29 @@ $(function ()
         }
     });
 
+    // remove button mouse events
+    $('html').on('mouseover', '.text-box, .image-box', function()
+    {
+        opaque( $(this).find('.remove-button') );
+    });
+
+    $('html').on('mouseout', '.text-box, .image-box', function()
+    {
+        transparent( $(this).find('.remove-button') );
+    });
+
+    $('html').on('click', '.image-box .remove-button', function()
+    {
+        removeTag($(this).parents("li")[0], $(this).prev().attr('src'));
+    });
+
+    $('html').on('click', '.text-box .remove-button', function()
+    {
+        $(this).parents("li")[0].remove();
+    });
+    // end of remove button
+
+
     // example items to insert
     $item1 = createTextItem();
     $item2 = createImageItem();
@@ -244,26 +293,8 @@ $(function ()
     $list.append($item1);
     $list.append($item2);
     // end of example
-
 });
 
-function transparent(elem)
-{
-    $(elem).css('opacity','0');
-}
-
-function opaque(elem)
-{
-    $(elem).css('opacity','0.5');
-}
-function removeTag(tag,src)
-{
-    console.log("preparing to remove")
-    console.log(tag)
-    console.log(src)
-    $(tag).remove()
-    $.get("/deleteImage?imagePath="+src)
-}
 
 /*
 function userImgMouse(elem,evtype)

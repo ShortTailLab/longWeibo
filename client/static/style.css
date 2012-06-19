@@ -84,20 +84,15 @@ body
     border-bottom: 0px;
 }
 
-.removeIMG
+.remove-button
 {
-
- position:absolute;
- right:3px;
- top:3px;
- width:5px
- display:block;
-
+    position:absolute;
+    right:3px;
+    top:3px;
+    width:5px
+    display:block;
 }
-.usrIMG
+
+.user-image
 {
-
-
-
-
 }

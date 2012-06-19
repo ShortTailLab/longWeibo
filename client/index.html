@@ -24,10 +24,12 @@
                 <li id="tool-add-image"  class="tool-button add-image" style="" >拖图片</li>
             </ul>
 
+            <!--
             <ul class="tool-box" style="position: relative; width: 120px; left:484px; top: 200px;">
                 <li id="tool-trash" class="tool-button" style="min-height: 100px;">段落拖到这里删除</li>
             </ul>
-            <ul class="tool-box" style="position: relative; width: 120px; left:484px; top: 300px;">
+            -->
+            <ul class="tool-box" style="position: relative; width: 120px; left:484px; top: 200px;">
                 <li id="tool-render" class="tool-button" style="min-height: 50px;">生成图片</li>
                 <li id="tool-render-result" class="tool-button" style="display: none; min-height: 50px;">URL</li>
             </ul>
@@ -40,20 +42,22 @@
     <!-- template section -->
     <div id="template-lib" style="display: none;">
         <div id="_text-item">
-            <li class="text-box">
-                <textarea class='autohint' title="这里输入文字."></textarea>
+            <li style="mragin: 5px;">
+                <div class="text-box" style="position: relative">
+                    <textarea class='autohint' title="这里输入文字."></textarea>
+                    <img class="remove-button" style="opacity:0" src="static/remove.png" />
+                </div>
             </li>
         </div>
 
         <div id="_image-item">
             <li style="margin: 5px;">
-                <div class="image-box" style="position:relative">
+                <div class="image-box" style="position: relative">
                     <input id="fileupload" type="hidden" name="files[]" multiple>
-                    <img class="usrIMG" style="display:none" src="" alt="" onmouseover="opaque($(this).next())" onmouseout="transparent($(this).next())"/>
-                    <img class="removeIMG" style="opacity:0" src="../static/remove.png" onmouseover="opaque(this)" onmouseout="transparent(this)" onclick="removeTag($(this).parent().parent(),$(this).prev().attr('src'))"/>
+                    <img class="user-image" src="" alt="" />
+                    <img class="remove-button" style="opacity:0" src="static/remove.png" />
                     <p>图片拖到这里添加.</p>
-                    <!--
-                    -->
+                    <!--   -->
                 </div>
             </li>
         </div>

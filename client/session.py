@@ -7,7 +7,7 @@ class RedisSessionStore:
     def __init__(self, redis_connection, **options):
         self.options = {
             'key_prefix': 'session',
-            'expire': 30,
+            'expire': 7200,
         }
         self.options.update(options)
         self.redis = redis_connection
