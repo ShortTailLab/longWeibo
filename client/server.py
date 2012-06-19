@@ -200,5 +200,10 @@ application = tornado.web.Application([
 
 if __name__ == "__main__":
     parse_command_line()
+    cutybin = "CutyCapt-i686" if options.i386 else "CutyCapt-x64"
+    xvfb = "xvfb-run --server-args=\"-screen 1, 1024x768x24\"" if options.xvfb else ""
+    print "============================"
+    print "server.py runing on port"+str(options.port)
+    print "============================"
     application.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()

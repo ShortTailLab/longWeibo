@@ -1,4 +1,4 @@
-function setupFileUpload($root)
+﻿function setupFileUpload($root)
 {
     var $uploader = $root.find('#fileupload');
     var $image = $root.find('.user-image');
@@ -149,18 +149,6 @@ function opaque(elem)
     $(elem).css('opacity','0.5');
 }
 
-function removeTag(tag,src)
-{
-    console.log("preparing to remove")
-    console.log(tag)
-    console.log(src)
-    $(tag).remove()
-    if(src)
-    {
-        $.get("/deleteImage?imagePath="+src)
-    }
-}
-
 $(function () 
 {
     $(document).bind('drop dragover', function(e)
@@ -273,28 +261,62 @@ $(function ()
         transparent( $(this).find('.remove-button') );
     });
 
-    $('html').on('click', '.image-box .remove-button', function()
+    $('html').on('click', '.image-box .remove-button, .text-box .remove-button', function()
     {
-        removeTag($(this).parents("li")[0], $(this).prev().attr('src'));
-    });
-
-    $('html').on('click', '.text-box .remove-button', function()
-    {
-        $(this).parents("li")[0].remove();
+        var $button = $(this);
+        promptDelete( function(){ $button.parents("li").remove() } );
     });
     // end of remove button
 
-
     // example items to insert
-    $item1 = createTextItem();
-    $item2 = createImageItem();
-
     $list = $("#doc");
-    $list.append($item1);
-    $list.append($item2);
+    $list.append( createTextItem() );
+    $list.append( createImageItem() );
     // end of example
 });
 
+function transparent(elem)
+{
+    $(elem).css('opacity','0');
+}
+
+function opaque(elem)
+{
+    $(elem).css('opacity','0.5');
+}
+
+function promptDelete(f)
+{
+    $.prompt('确认删除?',
+    {
+		overlayspeed:'fast',
+		buttons: { 确定:true, 取消:false },
+        callback: function(event, value)
+        {
+            if(value)
+            {
+                f();
+            }
+        }
+	});
+}
+
+/*
+	var $jqi=$.prompt('删除此段?',{
+				overlayspeed:'fast',
+				buttons: { Ok: true, Cancel: false },
+				focus:1,
+				})
+			
+	$jqi.bind('promptsubmit',function(e,v){
+			if (window.console)
+				if (v=='1'){
+					return true
+				}
+				else
+					return false
+	});
+*/	
 
 /*
 function userImgMouse(elem,evtype)
