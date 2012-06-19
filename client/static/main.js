@@ -1,4 +1,4 @@
-function setupFileUpload($root)
+﻿function setupFileUpload($root)
 {
     var $uploader = $root.find('#fileupload');
     var $image = $root.find('.usrIMG');
@@ -257,15 +257,69 @@ function opaque(elem)
 {
     $(elem).css('opacity','0.5');
 }
-function removeTag(tag,src)
+function removeTag() // @parameter (tagEle,imageSrc) or (tagEle)
 {
-    console.log("preparing to remove")
-    console.log(tag)
-    console.log(src)
-    $(tag).remove()
-    $.get("/deleteImage?imagePath="+src)
+	var argv=removeTag.arguments
+	var argc=argv.length	
+	
+	if(argc>2)
+		return;
+		
+	$(argv[0]).remove()
+	
+	if (argc==2)
+	$.get("/deleteImage?imagePath="+argv[1])
+	
+	
 }
 
+
+function pmpt()
+{
+	var argv=pmpt.arguments
+	var argc=argv.length
+
+	var $jqi=$.prompt('确认删除?',{
+		overlayspeed:'fast',
+		buttons:{确定:true,取消:false},
+	});
+	
+	$jqi.bind('promptsubmit', function(e,v,m,f){
+					if(v)
+					{
+						if (argc==2)
+							argv[0](argv[1]);
+						if (argc==3)
+							argv[0](argv[1]);
+					}
+					
+					
+	});
+	
+
+	
+	
+}	
+
+/*
+	var $jqi=$.prompt('删除此段?',{
+				overlayspeed:'fast',
+				buttons: { Ok: true, Cancel: false },
+				focus:1,
+				})
+			
+	$jqi.bind('promptsubmit',function(e,v){
+			if (window.console)
+				if (v=='1'){
+					return true
+				}
+				else
+					return false
+	});
+*/	
+
+$(function() {
+			});
 /*
 function userImgMouse(elem,evtype)
 {

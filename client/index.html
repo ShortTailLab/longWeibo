@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+﻿<!DOCTYPE HTML>
 <html>
 <head>
 <meta charset="utf-8">
@@ -6,13 +6,15 @@
 
 <link rel="stylesheet" type="text/css" href="/static/style.css" >
 
-<script src="/static/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 <script src="/static/js/jquery-ui-1.8.21.custom.min.js"></script>
 <script src="/static/jquery.iframe-transport.js"></script>
 <script src="/static/jquery.fileupload.js"></script>
 <script src="/static/jquery.textarea-expander.js"></script>
 <script src="/static/json2.js"></script>
 <script src="/static/main.js"></script>
+<link href="/static/lib/impromptu/impromptu.css" rel="stylesheet" type="text/css" />
+<script src="/static/lib/impromptu/jquery-impromptu.js"></script>
 </head>
 
 <body>
@@ -40,17 +42,21 @@
     <!-- template section -->
     <div id="template-lib" style="display: none;">
         <div id="_text-item">
-            <li class="text-box">
-                <textarea class='autohint' title="这里输入文字."></textarea>
+            <li class="text-box" style="position:relative">
+				<div class='text-button' style="position:relative;opacity:0" onmouseover="opaque(this)" onmouseout="transparent(this)" >
+					<img id="removeText" src="../static/remove.png"  onclick="pmpt(removeTag,$(this).parent().parent())"/>
+				</div>
+                <textarea class='autohint' title="这里输入文字."onmouseover></textarea>
+                
             </li>
-        </div>
+        
 
         <div id="_image-item">
             <li style="margin: 5px;">
-                <div class="image-box" style="position:relative">
+                <div class="image-box" style="position:relative" onmouseover="opaque($(this).next())" onmouseout="transparent($(this).next())">
                     <input id="fileupload" type="hidden" name="files[]" multiple>
-                    <img class="usrIMG" style="display:none" src="" alt="" onmouseover="opaque($(this).next())" onmouseout="transparent($(this).next())"/>
-                    <img class="removeIMG" style="opacity:0" src="../static/remove.png" onmouseover="opaque(this)" onmouseout="transparent(this)" onclick="removeTag($(this).parent().parent(),$(this).prev().attr('src'))"/>
+                    <img class="usrIMG" style="display:none" src="" alt="" />
+                    <img class="removeIMG" style="opacity:0" src="../static/remove.png" onmouseover="opaque(this)" onmouseout="transparent(this)" onclick="pmpt(removeTag,$(this).parent().parent(),$(this).prev().attr('src'))"/>
                     <p>图片拖到这里添加.</p>
                     <!--
                     -->
