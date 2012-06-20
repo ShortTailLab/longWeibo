@@ -21,9 +21,9 @@
                     .load( function()
                     {
                         var $imagebox = $root.find('.image-box');
-                        var w = $image.width() > $imagebox.width() ?$imagebox.width() : $image.width();
-                        //$imagebox.css('width', w);
-                        $image.css('width', w);
+                        var w = $image.width() > $imagebox.width() ? $imagebox.width() : $image.width();
+                        $imagebox.css('width', w);
+                        //$image.css('width', w);
                     });
                 $image.fadeIn();
 
@@ -54,14 +54,26 @@
     });
 }
 
-function textItemJson(text, height)
+function textItemJson(text, height, style)
 {
-    return { type : 'text', text : text, height : height };
+    return { type : 'text', text : text, height : height, style : style };
 }
 
 function imageItemJson(url, width)
 {
     return { type : 'image', image_url : url, width : width };
+}
+
+function getClasses($item)
+{
+    var classStr = "";
+    classStr += $item.hasClass("align-1") ? "align-1" : 
+                 $item.hasClass("align-2") ? "align-2" : "";
+    classStr += " ";
+    classStr += $item.hasClass("style-1") ? "style-1" : 
+                    $item.hasClass("style-2") ? "style-2" :
+                    $item.hasClass("style-3") ? "style-3" : "";
+    return classStr;
 }
 
 /*****
@@ -77,13 +89,15 @@ function postToRender($stuff)
     {
         if( $(this).find('.text-box').length > 0 )
         {
-            var text = $(this).find('textarea').val();
-            var hint = $(this).find('textarea').attr('title');
-            var height = $(this).find('textarea').height();
+            var $textarea = $(this).find('textarea');
+            var text = $textarea.val();
+            var hint = $textarea.attr('title');
+            var height = $textarea.height();
 
             if(text != '' && text != hint)
             {
-                itemList.push( textItemJson(text, height) );
+                var style = getClasses($textarea);
+                itemList.push( textItemJson(text, height, style) );
             }
         }
         else if( $(this).find('.image-box').length > 0 )
@@ -250,23 +264,65 @@ $(function ()
         }
     });
 
-    // remove button mouse events
+    // hover show / hide buttons
     $('html').on('mouseover', '.text-box, .image-box', function()
     {
-        opaque( $(this).find('.remove-button') );
+        opaque( $(this).find('.remove-button, .style-button, .position-button') );
     });
 
     $('html').on('mouseout', '.text-box, .image-box', function()
     {
-        transparent( $(this).find('.remove-button') );
+        transparent( $(this).find('.remove-button, .style-button, .position-button') );
     });
 
+    // remove button event
     $('html').on('click', '.image-box .remove-button, .text-box .remove-button', function()
     {
         var $button = $(this);
-        promptDelete( function(){ $button.parents("li").remove() } );
+        //promptDelete( function(){ $button.parents("li").remove() } );
+        $button.parents("li").remove();
     });
-    // end of remove button
+
+    // style button
+    $('html').on('click', '.text-box .style-button', function()
+    {
+        var $button = $(this);
+        //promptDelete( function(){ $button.parents("li").remove() } );
+        var $text = $button.siblings("textarea");
+        if( $text.hasClass("style-1") )
+        {
+            $text.removeClass("style-1");
+            $text.addClass("style-2");
+        }
+        else if( $text.hasClass("style-2") )
+        {
+            $text.removeClass("style-2");
+            $text.addClass("style-3");
+        }
+        else if( $text.hasClass("style-3") )
+        {
+            $text.removeClass("style-3");
+            $text.addClass("style-1");
+        }
+    });
+
+    // align button
+    $('html').on('click', '.text-box .position-button', function()
+    {
+        var $button = $(this);
+        var $text = $button.siblings("textarea");
+
+        if( $text.hasClass("align-1") )
+        {
+            $text.removeClass("align-1");
+            $text.addClass("align-2");
+        }
+        else if( $text.hasClass("align-2") )
+        {
+            $text.removeClass("align-2");
+            $text.addClass("align-1");
+        }
+    })
 
     // example items to insert
     $list = $("#doc");

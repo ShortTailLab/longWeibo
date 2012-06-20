@@ -24,10 +24,12 @@ sessionStore = RedisSessionStore(R)
 # helper methods
 def file_path(relative) :
     pyabspath = os.path.abspath(__file__)
-    abspath=os.path.dirname(pyabspath)
-    relative='./'+relative
-    path=os.path.join(abspath,relative)
+    abspath = os.path.dirname(pyabspath)
+    relative = './' + relative
+    path = os.path.join(abspath,relative)
     return path
+
+templateLoader = tornado.template.Loader(file_path(""))
 
 def domain_path(relative) :
     return os.path.join('http://localhost:' + str(options.port), relative)
@@ -51,6 +53,12 @@ def save_thumbnail(s, out_path):
     im.thumbnail(size, Image.ANTIALIAS)
     im.save(out_path, 'JPEG')
 
+
+def find_template(name):
+    if options.debug:
+        global templateLoader
+        templateLoader = tornado.template.Loader( file_path("") )
+    return templateLoader.load(name)
 
 # Handlers
 class BaseHandler(tornado.web.RequestHandler):
@@ -132,16 +140,15 @@ class Render(BaseHandler):
         itemList = json.loads(self.get_argument('itemList'))
         print str(itemList)
 
-        loader = tornado.template.Loader(file_path(""))
         
         itemHTML = ""
         for item in itemList:
             if item['type'] == 'text':
-                itemHTML += loader.load('_text_item.html').generate(text = item['text'], height = item['height'])
+                itemHTML += find_template('_text_item.html').generate(text = item['text'], height = item['height'], style=item['style'])
             elif item['type'] == 'image':
-                itemHTML += loader.load('_image_item.html').generate(image_url = item['image_url'], width = item['width'])
+                itemHTML += find_template('_image_item.html').generate(image_url = item['image_url'], width = item['width'])
 
-        html = loader.load("_render.html").generate( content = itemHTML )
+        html = find_template("_render.html").generate( content = itemHTML )
 
         filename = rand_string()
         domain_src_file = domain_path('static/render/' + filename + '.html')
@@ -153,9 +160,9 @@ class Render(BaseHandler):
         f.write(html)
         f.close()
 	
-    	cutybin = "CutyCapt-i686" if options.i386 else "CutyCapt-x64"
+        cutybin = file_path("../bin/") + ("CutyCapt-i686" if options.i386 else "CutyCapt-x64")
     	xvfb = 'xvfb-run --auto-servernum --server-args="-screen 0, 1024x768x24"' if options.xvfb else ""
-        cmd = "{3} ../bin/{0} --min-width=0 --url={1} --out={2}".format(cutybin, domain_src_file, output_file, xvfb)
+        cmd = "{3} {0} --min-width=0 --url={1} --out={2}".format(cutybin, domain_src_file, output_file, xvfb)
 
         print 'source html: ' + local_src_file
         print "output file: " + output_file

@@ -47,8 +47,8 @@ body
     border: 0px;
     resize: none;
     width: 100%;
-    line-height: 16px;
-    font-size: 16px;
+    /*line-height: 16px;*/
+    /*font-size: 16px;*/
 }
 
 .autohint
@@ -86,22 +86,62 @@ body
 
 .remove-button
 {
-    position:absolute;
+    cursor: pointer;
+    position: absolute;
     right:3px;
     top:3px;
-    width:5px
     display:block;
+}
+
+.style-button
+{
+    cursor: pointer;
+    position: absolute;
+    right: 40px;
+    top: 3px;
+    display: block;
+}
+
+
+.position-button
+{
+    cursor: pointer;
+    position: absolute;
+    right: 80px;
+    top: 3px;
+    display: block;
 }
 
 .user-image
 {
 }
 
-.text-button
+/* style presets */
+.style-1
 {
+    font-size: 16px;
+    line-height: 16px;
 }
 
-#removeText
+.style-2
 {
-	width:20px;
+    font-size: 24px;
+    line-height: 24px;
 }
+
+.style-3
+{
+    font-size: 36px;
+    line-height: 36px;
+}
+
+.align-1
+{
+    text-align: left;
+}
+
+.align-2
+{
+    text-align: center;
+}
+
