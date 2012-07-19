@@ -6,12 +6,32 @@ body
     font-family: STHeiti, tohoma, arial
 }
 
+.center520
+{
+    width: 520px; 
+    margin: 0 auto; 
+}
+
 .center480
 {
     width: 480px; 
     margin: 0 auto; 
     border: 2px dashed #DADADA;
+}
+
+.bg-title-bright
+{
+    background-color: #DF7F43; 
+}
+
+.bg-content-bright
+{
     background-color: #FFFFFF;
+}
+
+.text-bright
+{
+    color: #FFFFFF;
 }
 
 .box-highlight
@@ -58,8 +78,6 @@ body
 
 .tool-box
 {
-    margin: 5px;
-    border: 3px dashed #000000;
     list-style: none; 
     padding : 0; 
     margin : 0;  
@@ -69,36 +87,31 @@ body
 .tool-button
 {
     font-family: Heiti SC;
-    font-size: 20px;
-    line-height: 40px;
+    font-size: 23px;
 
-    border-bottom: 3px dashed #000000;   
     cursor: pointer;
-
-    margin: 5px;
     text-align: center;
 }
 
 .tool-button:last-child
 {
-    border-bottom: 0px;
 }
 
 .remove-button
 {
     cursor: pointer;
     position: absolute;
-    right:3px;
-    top:3px;
-    display:block;
+    right: 3px;
+    top: 3px;
+    display: block;
 }
 
 .style-button
 {
     cursor: pointer;
     position: absolute;
-    right: 103px;
-    top: 3px;
+    left: -25px;
+    top: 0px;
     display: block;
 }
 
@@ -107,8 +120,8 @@ body
 {
     cursor: pointer;
     position: absolute;
-    right: 80px;
-    top: 3px;
+    left: -25px;
+    top: 25px;
     display: block;
 }
 

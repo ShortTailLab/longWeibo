@@ -82,7 +82,8 @@ function getClasses($item)
 function postToRender($stuff)
 {
     //$('#tool-render-result').hide();
-    $('#tool-render-result').html("正在生成图片");
+    $('#tool-render-result').html("正在生成...");
+    $('#tool-render-result').css("display", "block");
 
     var itemList = [];
     $stuff.children().each( function()
@@ -116,7 +117,7 @@ function postToRender($stuff)
     {
         if(data.success)
         {
-            $('#tool-render-result').html('<a target="_blank" href="' + data.image_url + '">做好了.</a>');
+            $('#tool-render-result').html('<a target="_blank" href="' + data.image_url + '">点这里</a>');
             $('#tool-render-result').slideDown();
         }
     });

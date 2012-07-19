@@ -5,73 +5,90 @@
 <title>呵呵长微博 - 最好用的长微博</title>
 <meta name="description" content="微博 长微博 图片长微博 微博生成工具 长微博生成工具">
 <link rel="stylesheet" type="text/css" href="/static/style.css" >
-<link rel="stylesheet" type="text/css" href="/static/lib/impromptu/impromptu.css">
 
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script src="/static/js/jquery-1.7.2.min.js"></script>
 <script src="/static/js/jquery-ui-1.8.21.custom.min.js"></script>
-<script src="/static/jquery.iframe-transport.js"></script>
-<script src="/static/jquery.fileupload.js"></script>
-<script src="/static/jquery.textarea-expander.js"></script>
+<script src="/static/js/jquery.iframe-transport.js"></script>
+<script src="/static/js/jquery.fileupload.js"></script>
+<script src="/static/js/jquery.textarea-expander.js"></script>
 <script src="/static/json2.js"></script>
 <script src="/static/main.js"></script>
-<script src="/static/lib/impromptu/jquery-impromptu.js"></script>
 </head>
 
 <body>
-    <div class="center480" style="background-color: #DDDDDD; border: none; margin-top: 5px; margin-bottom: 15px;">
-        <div style="font-size: 2em;"> 呵呵长微博</div>
-        <div style="margin-top: 5px; font-size: 0.9em;">最简单，最好用的长微博工具. 有问题联系我们喔: y@shorttaillab.com</div>
-    </div>
+    <div class="center520 bg-title-bright" style="height: 108px; border: none; margin-top: 5px; margin-bottom: 15px;">
+        <div style="padding: 13px 0px 15px 30px;">
+            <div style="font-size: 2em; color: #FFFFFF;">呵呵长微博</div>
+            <div style="margin-top: 5px; font-size: 14px; color: #FFFFFF;">最简单，最好用的长微博工具. 有问题联系我们喔: y@shorttaillab.com</div>
+        </div>
 
-    <!-- content section -->
-    <div class="center480">
-        <div style="position: fixed; height: 0px;">
-            <ul id='tool-add-list' class="tool-box" style="position: relative; width: 120px; left:484px; top: 100px;">
-                <li id="tool-add-text"   class="tool-button add-text"  style="">写文字</li>
-                <li id="tool-add-image"  class="tool-button add-image" style="" >拖图片</li>
-            </ul>
+        <!-- main body -->
+        <div class="center480 bg-content-bright">
+            <!-- button section -->
+            <div style="position: fixed; height: 0px;">
+                <ul id='tool-add-list' class="tool-box" style="position: relative; left:484px; top: 100px;">
+                    <li id="tool-add-text"   class="tool-button add-text"  style="">写文字</li>
+                    <li id="tool-add-image"  class="tool-button add-image" style="" >拖图片</li>
+                </ul>
 
-            <!--
-            <ul class="tool-box" style="position: relative; width: 120px; left:484px; top: 200px;">
-                <li id="tool-trash" class="tool-button" style="min-height: 100px;">段落拖到这里删除</li>
-            </ul>
-            -->
-            <ul class="tool-box" style="position: relative; width: 120px; left:484px; top: 200px;">
-                <li id="tool-render" class="tool-button" style="min-height: 50px;">生成图片</li>
-                <li id="tool-render-result" class="tool-button" style="min-height: 50px;"> </li>
+                <!--
+                <ul class="tool-box" style="position: relative; width: 120px; left:484px; top: 200px;">
+                    <li id="tool-trash" class="tool-button" style="min-height: 100px;">段落拖到这里删除</li>
+                </ul>
+                -->
+                <ul class="tool-box" style="position: relative; left:484px; top: 200px; padding-left: 10px;">
+                    <li id="tool-render" class="tool-button bg-title-bright text-bright" style="width: 80px; line-height: 50px; margin-bottom: 5px;">生成</li>
+                    <li id="tool-render-result" class="tool-button bg-title-bright text-bright" style="width: 80px; line-height: 50px; display: none;"></li>
+                </ul>
+            </div>
+            
+            <!-- content -->
+            <ul id="doc" style="width: 480px; min-height: 600px; list-style: none; padding: 0; margin: 0 auto;">
             </ul>
         </div>
 
-        <ul id="doc" style="width: 480px; min-height: 600px; list-style: none; padding: 0; margin: 0 auto;">
-        </ul>
-    </div>
+        <!-- template section -->
+        <div id="template-lib" style="display: none;">
+            <div id="_text-item">
+                <li style="mragin: 5px;">
+                    <div class="text-box" style="position: relative">
+                        <textarea class='autohint style-1 align-1' title="这里输入文字."></textarea>
+                        <img class="style-button" style="opacity:0; width: 20px; margin-bottom: 3px;" src="static/img/fontstyle.png" />
+                        <img class="position-button" style="opacity:0; width: 20px;" src="static/img/align.png" />
+                        <img class="remove-button" style="opacity:0; width: 20px;" src="static/img/remove.png" />
+                    </div>
+                </li>
+            </div>
+            
+            <div id="_image-item">
+                <li style="margin: 5px;">
+                    <div class="image-box" style="position: relative">
+                        <input id="fileupload" type="hidden" name="files[]" multiple>
+                        <img class="user-image" style="display: none" src="" alt="" />
+                        <img class="remove-button" style="opacity:0; width: 20px;" src="static/img/remove.png" />
+                        <p>图片拖到这里添加.</p>
+                        <!--   -->
+                    </div>
+                </li>
+            </div>
 
-    <!-- template section -->
-    <div id="template-lib" style="display: none;">
-        <div id="_text-item">
-            <li style="mragin: 5px;">
-                <div class="text-box" style="position: relative">
-                    <textarea class='autohint style-1 align-1' title="这里输入文字."></textarea>
-                    <img class="style-button" style="opacity:0; width:18px;" src="static/fontstyle.png" />
-                    <img class="position-button" style="opacity:0; width:18px;" src="static/align.png" />
-                    <img class="remove-button" style="opacity:0; width:18px;" src="static/remove.png" />
-                </div>
-            </li>
-        </div>
-        
-        <div id="_image-item">
-            <li style="margin: 5px;">
-                <div class="image-box" style="position: relative">
-                    <input id="fileupload" type="hidden" name="files[]" multiple>
-                    <img class="user-image" style="display: none" src="" alt="" />
-                    <img class="remove-button" style="opacity:0" src="static/remove.png" />
-                    <p>图片拖到这里添加.</p>
-                    <!--   -->
-                </div>
-            </li>
         </div>
 
     </div>
+    <!-- clicky plugin -->
+    <script type="text/javascript">
+        var clicky_site_ids = clicky_site_ids || [];
+        clicky_site_ids.push(66618525);
+        (function() {
+            var s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.async = true;
+            s.src = '//static.getclicky.com/js';
+            ( document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild( s );
+        })();
+    </script>
+
+    </script>
 </body>
 
 </html>
