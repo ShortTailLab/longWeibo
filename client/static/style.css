@@ -87,44 +87,46 @@ body
 .tool-button
 {
     font-family: Heiti SC;
-    font-size: 23px;
-
     cursor: pointer;
+}
+
+.tool-button-text
+{
     text-align: center;
+    font-size: 23px;
+    line-height: 50px;
 }
 
 .tool-button:last-child
 {
 }
 
-.remove-button
+
+.inplace-button
 {
     cursor: pointer;
+    opacity: 0;
+    display: block;
+}
+
+.remove-button
+{
     position: absolute;
     right: 3px;
     top: 3px;
-    display: block;
 }
 
+/* tag */
 .style-button
 {
-    cursor: pointer;
-    position: absolute;
-    left: -25px;
-    top: 0px;
-    display: block;
 }
 
-
+/* tag */
 .position-button
 {
-    cursor: pointer;
-    position: absolute;
-    left: -25px;
-    top: 25px;
-    display: block;
 }
 
+/* tag */
 .user-image
 {
 }

@@ -46,7 +46,11 @@
 
 			// find content length and box width
 			var vlen = e.value.length, ewidth = e.offsetWidth;
-			if (vlen != e.valLength || ewidth != e.boxWidth) {
+
+            // HACK: force update textarea every time
+//			if (vlen != e.valLength || 
+//                ewidth != e.boxWidth) 
+            {
 
 				if (hCheck && (vlen < e.valLength || ewidth != e.boxWidth)) e.style.height = "0px";
 				var h = Math.max(e.expandMin, Math.min(e.scrollHeight, e.expandMax));

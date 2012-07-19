@@ -83,7 +83,7 @@ function postToRender($stuff)
 {
     //$('#tool-render-result').hide();
     $('#tool-render-result').html("正在生成...");
-    $('#tool-render-result').css("display", "block");
+    $('#tool-render-result').show();
 
     var itemList = [];
     $stuff.children().each( function()
@@ -137,7 +137,7 @@ function createTextItem(defaultText)
         $item.find("textarea").val( $item.find('textarea').attr('title'));
     }
 
-    $item.find("textarea").TextAreaExpander(50);
+    $item.find("textarea").TextAreaExpander(25);
     return $item;
 }
 
@@ -161,7 +161,7 @@ function transparent(elem)
 
 function opaque(elem)
 {
-    $(elem).css('opacity','0.5');
+    $(elem).css('opacity','0.8');
 }
 
 $(function () 
@@ -289,7 +289,9 @@ $(function ()
     {
         var $button = $(this);
         //promptDelete( function(){ $button.parents("li").remove() } );
-        var $text = $button.siblings("textarea");
+        //var $text = $button.siblings("textarea");
+        var $text = $button.parents(".text-box").find("textarea");
+
         if( $text.hasClass("style-1") )
         {
             $text.removeClass("style-1");
@@ -305,13 +307,15 @@ $(function ()
             $text.removeClass("style-3");
             $text.addClass("style-1");
         }
+        $text.trigger("focus");
     });
 
     // align button
     $('html').on('click', '.text-box .position-button', function()
     {
         var $button = $(this);
-        var $text = $button.siblings("textarea");
+        //var $text = $button.siblings("textarea");
+        var $text = $button.parents(".text-box").find("textarea");
 
         if( $text.hasClass("align-1") )
         {
@@ -332,16 +336,6 @@ $(function ()
     // end of example
 });
 
-function transparent(elem)
-{
-    $(elem).css('opacity','0');
-}
-
-function opaque(elem)
-{
-    $(elem).css('opacity','0.5');
-}
-
 function promptDelete(f)
 {
     $.prompt('确认删除?',
@@ -358,34 +352,3 @@ function promptDelete(f)
 	});
 }
 
-/*
-	var $jqi=$.prompt('删除此段?',{
-				overlayspeed:'fast',
-				buttons: { Ok: true, Cancel: false },
-				focus:1,
-				})
-			
-	$jqi.bind('promptsubmit',function(e,v){
-			if (window.console)
-				if (v=='1'){
-					return true
-				}
-				else
-					return false
-	});
-*/	
-
-/*
-function userImgMouse(elem,evtype)
-{
-    if (evtype="over"){
-        $(elem).next().css('opacity', '0.8');
-    }
-    else{
-        $(elem).next().css('opacity','0');
-    }
-
-
-}
-
-*/

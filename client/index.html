@@ -1,18 +1,18 @@
 ﻿<!DOCTYPE HTML>
 <html>
 <head>
-<meta charset="utf-8">
-<title>呵呵长微博 - 最好用的长微博</title>
-<meta name="description" content="微博 长微博 图片长微博 微博生成工具 长微博生成工具">
-<link rel="stylesheet" type="text/css" href="/static/style.css" >
+    <meta charset="utf-8">
+    <title>呵呵长微博 - 最好用的长微博</title>
+    <meta name="description" content="微博 长微博 图片长微博 微博生成工具 长微博生成工具">
+    <link rel="stylesheet" type="text/css" href="/static/style.css" >
 
-<script src="/static/js/jquery-1.7.2.min.js"></script>
-<script src="/static/js/jquery-ui-1.8.21.custom.min.js"></script>
-<script src="/static/js/jquery.iframe-transport.js"></script>
-<script src="/static/js/jquery.fileupload.js"></script>
-<script src="/static/js/jquery.textarea-expander.js"></script>
-<script src="/static/json2.js"></script>
-<script src="/static/main.js"></script>
+    <script src="/static/js/jquery-1.7.2.min.js"></script>
+    <script src="/static/js/jquery-ui-1.8.21.custom.min.js"></script>
+    <script src="/static/js/jquery.iframe-transport.js"></script>
+    <script src="/static/js/jquery.fileupload.js"></script>
+    <script src="/static/js/jquery.textarea-expander.js"></script>
+    <script src="/static/json2.js"></script>
+    <script src="/static/main.js"></script>
 </head>
 
 <body>
@@ -26,9 +26,9 @@
         <div class="center480 bg-content-bright">
             <!-- button section -->
             <div style="position: fixed; height: 0px;">
-                <ul id='tool-add-list' class="tool-box" style="position: relative; left:484px; top: 100px;">
-                    <li id="tool-add-text"   class="tool-button add-text"  style="">写文字</li>
-                    <li id="tool-add-image"  class="tool-button add-image" style="" >拖图片</li>
+                <ul id='tool-add-list' class="tool-box" style="position: relative; left:484px; top: 100px; margin-left: 10px;">
+                    <li id="tool-add-text"   class="tool-button add-text"  style=""><img src="/static/img/button_p.png"></li>
+                    <li id="tool-add-image"  class="tool-button add-image" style="" ><img src="/static/img/button_t.png"></li>
                 </ul>
 
                 <!--
@@ -36,9 +36,9 @@
                     <li id="tool-trash" class="tool-button" style="min-height: 100px;">段落拖到这里删除</li>
                 </ul>
                 -->
-                <ul class="tool-box" style="position: relative; left:484px; top: 200px; padding-left: 10px;">
-                    <li id="tool-render" class="tool-button bg-title-bright text-bright" style="width: 80px; line-height: 50px; margin-bottom: 5px;">生成</li>
-                    <li id="tool-render-result" class="tool-button bg-title-bright text-bright" style="width: 80px; line-height: 50px; display: none;"></li>
+                <ul class="tool-box" style="position: relative; left:484px; top: 200px; margin-left: 10px;">
+                    <li id="tool-render" class="tool-button bg-title-bright tool-button-text text-bright" style="width: 80px; margin-bottom: 5px;">生成</li>
+                    <li id="tool-render-result" class="tool-button bg-title-bright tool-button-text text-bright" style="width: 80px; display: none;"></li>
                 </ul>
             </div>
             
@@ -50,12 +50,14 @@
         <!-- template section -->
         <div id="template-lib" style="display: none;">
             <div id="_text-item">
-                <li style="mragin: 5px;">
+                <li style="">
                     <div class="text-box" style="position: relative">
                         <textarea class='autohint style-1 align-1' title="这里输入文字."></textarea>
-                        <img class="style-button" style="opacity:0; width: 20px; margin-bottom: 3px;" src="static/img/fontstyle.png" />
-                        <img class="position-button" style="opacity:0; width: 20px;" src="static/img/align.png" />
-                        <img class="remove-button" style="opacity:0; width: 20px;" src="static/img/remove.png" />
+                        <div style="position: absolute; top: 0px; left: -30px;">
+                            <img class="inplace-button style-button" style="margin-bottom: 3px;" src="static/img/button_b_w1.png" />
+                            <img class="inplace-button position-button" src="static/img/button_b_s1.png" />
+                        </div>
+                        <img class="inplace-button remove-button" style="" src="static/img/remove.png" />
                     </div>
                 </li>
             </div>
@@ -65,16 +67,14 @@
                     <div class="image-box" style="position: relative">
                         <input id="fileupload" type="hidden" name="files[]" multiple>
                         <img class="user-image" style="display: none" src="" alt="" />
-                        <img class="remove-button" style="opacity:0; width: 20px;" src="static/img/remove.png" />
+                        <img class="inplace-button remove-button" src="static/img/remove.png" />
                         <p>图片拖到这里添加.</p>
-                        <!--   -->
                     </div>
                 </li>
             </div>
-
         </div>
-
     </div>
+
     <!-- clicky plugin -->
     <script type="text/javascript">
         var clicky_site_ids = clicky_site_ids || [];
@@ -86,8 +86,6 @@
             s.src = '//static.getclicky.com/js';
             ( document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0] ).appendChild( s );
         })();
-    </script>
-
     </script>
 </body>
 
