@@ -23,7 +23,7 @@
                         var $imagebox = $root.find('.image-box');
                         var w = $image.width() > $imagebox.width() ? $imagebox.width() : $image.width();
                         $imagebox.css('width', w);
-                        //$image.css('width', w);
+                        $image.css('width', w);
                     });
                 $image.fadeIn();
 

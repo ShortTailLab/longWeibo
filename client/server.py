@@ -51,8 +51,7 @@ def save_thumbnail(s, out_path):
     # use real height, but contrain width to max displayable
     size = 480, im.size[1]
     im.thumbnail(size, Image.ANTIALIAS)
-    im.save(out_path, 'JPEG')
-
+    im.save(out_path, 'JPEG', quality = 95)
 
 def find_template(name):
     if options.debug:
